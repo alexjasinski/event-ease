@@ -1,4 +1,6 @@
-### 📌 Copilot Assistance in EventEase App Development
+# EventEase C# Blazor app with form validation, state management, and attendance tracking
+
+## Copilot Assistance in EventEase App Development
 
 1.  **Foundational Components (Activity 1)**
     
