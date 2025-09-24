@@ -1,0 +1,28 @@
+﻿@using EventEaseApp.Services
+@inject UserSessionService SessionService
+
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">EventEase</a>
+    </div>
+</div>
+
+<div class="sidebar">
+    <nav class="flex-column">
+
+        <!-- Existing Links -->
+        <NavLink class="nav-link" href="">Home</NavLink>
+        <NavLink class="nav-link" href="counter">Counter</NavLink>
+        <NavLink class="nav-link" href="weather">Weather</NavLink>
+
+        <!-- ✅ New Links for Events -->
+        <NavLink class="nav-link" href="events">Events</NavLink>
+        <NavLink class="nav-link" href="registration">Registration</NavLink>
+    </nav>
+</div>
+
+@if (SessionService.IsRegistered)
+{
+    <span class="nav-link">Welcome, @SessionService.UserName!</span>
+}

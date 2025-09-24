@@ -1,0 +1,54 @@
+@page "/eventdetails/{EventId:int}"
+@using EventEaseApp.Models
+@using EventEaseApp.Services
+@inject UserSessionService SessionService
+
+<h3>Event Details</h3>
+
+@if (eventItem == null)
+{
+    <p>Loading event...</p>
+}
+else
+{
+    <h4>@eventItem.Name</h4>
+    <p>Date: @eventItem.Date.ToShortDateString()</p>
+    <p>Location: @eventItem.Location</p>
+
+    @if (SessionService.IsRegistered)
+    {
+        <button class="btn btn-success" @onclick="AttendEvent">Attend Event</button>
+        <p>@attendanceMessage</p>
+    }
+    else
+    {
+        <p>Please <NavLink href="/registration">register</NavLink> to attend this event.</p>
+    }
+}
+
+@code {
+    [Parameter] public int EventId { get; set; }
+    private Event? eventItem;
+    private string? attendanceMessage;
+
+    protected override void OnInitialized()
+    {
+        // Normally from DB — mock data here
+        eventItem = new Event
+        {
+            Id = EventId,
+            Name = $"Event {EventId}",
+            Date = DateTime.Today.AddDays(EventId),
+            Location = $"Location {EventId}"
+        };
+    }
+
+    private void AttendEvent()
+    {
+        if (eventItem != null && SessionService.UserEmail != null)
+        {
+            eventItem.Attendees.Add(SessionService.UserEmail);
+            attendanceMessage = $"{SessionService.UserName}, you’re marked as attending!";
+        }
+    }
+}

@@ -1,0 +1,52 @@
+@page "/registration"
+@using System.ComponentModel.DataAnnotations
+@using EventEaseApp.Services
+@inject UserSessionService SessionService
+
+<h3>Event Registration</h3>
+
+<EditForm Model="@registrationModel" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label for="name">Name</label>
+        <InputText id="name" class="form-control" @bind-Value="registrationModel.Name" />
+        <ValidationMessage For="@(() => registrationModel.Name)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="email">Email</label>
+        <InputText id="email" class="form-control" @bind-Value="registrationModel.Email" />
+        <ValidationMessage For="@(() => registrationModel.Email)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Register</button>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-success mt-3">@successMessage</div>
+}
+
+@code {
+    private RegistrationModel registrationModel = new();
+    private string? successMessage;
+
+    private void HandleValidSubmit()
+    {
+        SessionService.RegisterUser(registrationModel.Name, registrationModel.Email);
+        successMessage = $"Thanks {registrationModel.Name}, you’re registered!";
+        registrationModel = new(); // reset form
+    }
+
+    public class RegistrationModel
+    {
+        [Required(ErrorMessage = "Name is required.")]
+        public string? Name { get; set; }
+
+        [Required(ErrorMessage = "Email is required.")]
+        [EmailAddress(ErrorMessage = "Invalid email format.")]
+        public string? Email { get; set; }
+    }
+}

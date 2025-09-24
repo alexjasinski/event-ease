@@ -1,0 +1,38 @@
+@code {
+    [Parameter] public string EventName { get; set; } = string.Empty;
+    [Parameter] public DateTime EventDate { get; set; }
+    [Parameter] public string Location { get; set; } = string.Empty;
+}
+
+<div class="event-card">
+    <h3>@EventName</h3>
+    <p><strong>Date:</strong> @EventDate.ToShortDateString()</p>
+    <p><strong>Location:</strong> @Location</p>
+</div>
+
+<style>
+    .event-card {
+        border: 1px solid #ccc;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 8px;
+        box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+    }
+</style>
+
+@using EventEaseApp.Models
+
+<div class="card m-2 p-3 shadow-sm">
+    <h3>@(string.IsNullOrWhiteSpace(Event?.Name) ? "Unnamed Event" : Event.Name)</h3>
+    <p>Date: @(Event?.Date.ToString("MM/dd/yyyy") ?? "TBD")</p>
+    <p>Location: @(string.IsNullOrWhiteSpace(Event?.Location) ? "No location provided" : Event.Location)</p>
+
+    <NavLink class="btn btn-primary" href=$"/eventdetails/{Event?.Id}">
+        View Details
+    </NavLink>
+</div>
+
+@code {
+    [Parameter]
+    public Event? Event { get; set; }
+}
